@@ -3,22 +3,29 @@ const { Schema } = mongoose;
 var userSignup=new Schema({
     firstName:{
         type:String,
-        required:true,
+        // required:true,
         trim:true,
     },
     lastName:{
         type:String,
-        required:true,
+        // required:true,
         trim:true,
     },
     email:{
         type:String,
-        required:true,
+        // required:true,
     },
     password:{
         type:String,
-        required:true
+        // required:true
     },
+    todo: [
+        {
+        type: Schema.Types.ObjectId, // Reference to the user who owns this todo
+        ref: 'Todo',
+        // required: true,
+    },
+],
     createdAt:{
         type:Date,
         default:Date.now

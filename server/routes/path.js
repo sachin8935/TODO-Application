@@ -2,6 +2,11 @@ const express=require('express');
 const router= express.Router();
 const userEmailCheck= require('../middleware/signupHandler');
 const userSignUp= require('../controller/signup');
+const userLoginCheck= require('../middleware/loginHandler');
+const {addTodo,getAllTodo}= require('../controller/createTodo');
+const userLogin= require('../controller/login');
 router.post('/signup',userEmailCheck,userSignUp);
-router.post('/login',)
+router.post('/login',userLoginCheck,userLogin);
+router.post('/addTodo',addTodo);
+router.get('/getAllTodo',getAllTodo);
 module.exports=router;

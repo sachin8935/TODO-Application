@@ -1,13 +1,15 @@
 const express= require("express");
 const app= express();
-require('dotenv').config();
+const cookie_parser= require('cookie-parser');
+app.use(cookie_parser());
 app.use(express.json());
+require('dotenv').config();
 const PORT = process.env.PORT||80;
 const dbConnect= require('./database/database');
 dbConnect
 .then(()=>{
     app.listen(PORT,()=>{
-    console.log(`listening on PORT ${PORT}`);
+        console.log(`listening on PORT ${PORT}`);
     });
     console.log("The mongoDB connection is established");
 })

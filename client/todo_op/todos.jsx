@@ -10,9 +10,9 @@ function Todo(){
     function addTodoHandler(){
         setAddTodoButton((prevStatus)=>!prevStatus);
     }
-    axios.get(`${URL}/getAllTodo`, {
+    axios.get('http://localhost:3000/getAllTodo', {
         withCredentials: true,
-    })
+      })    
     .then((response) => {
         toast.success("Todos fetched successfully", {
             position: "top-right",

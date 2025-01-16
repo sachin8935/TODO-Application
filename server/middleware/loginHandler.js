@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const key = process.env.SECRET_KEY;
 const loginMiddleware = async (req, res, next) => {
     const token = req.cookies.token;
-    console.log(token);
     if (!token) {
         return next();
     }

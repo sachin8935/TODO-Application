@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+const URL = import.meta.env.VITE_BACKEND_URL;
 function Login() {
   const [email_value, setEmail_value] = useState("");
   const [pass_value, setPass_value] = useState("");

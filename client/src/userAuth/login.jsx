@@ -22,6 +22,8 @@ function Login() {
       .post(`${URL}/login`, {
         email:email_value,
         password:pass_value
+      },{
+        withCredentials:true,
       })
       .then((response) => {
         console.log(response);

@@ -30,7 +30,7 @@ const userEmailCheck= async(req,res,next)=>{
         if(err instanceof z.ZodError){
             return res.status(400).json({
                 status:"error",
-                message:"Validation failed",
+                message:"Enter all Details in a valid manner",
                 errors:err.errors.map((e)=>({field:e.path[0],message:e.message}))
             })
         }

@@ -5,6 +5,7 @@ const key = process.env.SECRET_KEY;
 const addTodo = async (req, res) => {
   try {
     const token = req.cookies.token;
+    console.log(token);
     const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
     const userId = decodedToken.id;
     const todoData = new todo({
@@ -32,6 +33,7 @@ const addTodo = async (req, res) => {
 };
 const getAllTodo = async (req, res) => {
   try {
+    console.log(req.cookies);
     const token = req.cookies.token;
     if (!token) {
       return res.status(401).json({
@@ -49,13 +51,20 @@ const getAllTodo = async (req, res) => {
         message: "User not found.",
       });
     }
-
-    res.status(200).json({
-      success: true,
-      message: "User details fetched successfully.",
-      id: userId,
-      data: foundUser.todo,
-    });
+    const fetchTodos = async () => {
+      try {
+        const todos = await todo.find({ _id: { $in: foundUser.todo } });
+        res.status(200).json({
+          success: true,
+          message: "User details fetched successfully.",
+          id: userId,
+          data:todos
+        });
+      } catch (error) {
+        console.error("Error fetching todos:", error);
+      }
+    };
+    fetchTodos();
   } catch (err) {
     console.error(err);
     return res.status(500).json({
@@ -112,11 +121,11 @@ const updateTodo = async (req, res) => {
 const deleteTodo = async (req, res) => {
   try {
     const token = req.cookies.token;
-    if(!token){
-        return res.status(404).json({
-            success: false,
-            message: "You need to login before updating the todo",
-          });
+    if (!token) {
+      return res.status(404).json({
+        success: false,
+        message: "You need to login before updating the todo",
+      });
     }
     const decodedToken = jwt.verify(token, key);
     const userId = decodedToken.id;
@@ -144,4 +153,4 @@ const deleteTodo = async (req, res) => {
     });
   }
 };
-module.exports = { addTodo, getAllTodo, updateTodo,deleteTodo };
+module.exports = { addTodo, getAllTodo, updateTodo, deleteTodo };

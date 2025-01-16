@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const key = process.env.SECRET_KEY;
 const loginMiddleware = async (req, res, next) => {
     const token = req.cookies.token;
+    console.log(token);
     if (!token) {
         return next();
     }
@@ -16,7 +17,6 @@ const loginMiddleware = async (req, res, next) => {
             return res.status(404).json({ message: "User not found" });
         }
     } catch (err) {
-        res.clearCookie(token);
         next();
     }
 };

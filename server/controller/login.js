@@ -2,13 +2,6 @@ const login = require('../models/signupSchema');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const key = process.env.SECRET_KEY;
-const cookieOptions = {
-    expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-    httpOnly: true,
-    // secure: process.env.NODE_ENV === "production",
-    // sameSite: "Strict",
-};
-
 const loginUser = async (req, res) => {
     try {
         if (req.user) {
@@ -19,7 +12,7 @@ const loginUser = async (req, res) => {
             });
         }
         const { email, password } = req.body;
-        if (!email || !password) {
+        if (!email || !password) { 
             return res.status(400).json({ message: "Email and password are required" });
         }
 
@@ -38,7 +31,11 @@ const loginUser = async (req, res) => {
         };
         const token = jwt.sign(payload, key, { expiresIn: "2h" });
         user.password = undefined;
-        res.cookie("token", token, cookieOptions).status(200).json({
+        const cookieOptions = {
+            expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days
+            httpOnly: true,
+        };        
+        res.cookie("token", token,cookieOptions).status(200).json({
             success: true,
             token,
             user,

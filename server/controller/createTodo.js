@@ -71,6 +71,46 @@ const getAllTodo = async (req, res) => {
     });
   }
 };
+const getTodoById = async (req, res) => {
+  console.log("hello");
+  try {
+    const token = req.cookies.token;
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "You need to login to access this todo.",
+      });
+    }
+
+    const decodedToken = jwt.verify(token, key);
+    const userId = decodedToken.id;
+    const todoId = req.params.id // Assuming the ID is passed as a URL parameter
+
+    const foundTodo = await todo.findOne({ _id: todoId, userId });
+    console.log(foundTodo);
+
+    if (!foundTodo) {
+      return res.status(404).json({
+        success: false,
+        message: "Todo not found or you do not have permission to access it.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Todo fetched successfully.",
+      todo: foundTodo,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred while fetching the todo.",
+    });
+  }
+};
+
+
 const updateTodo = async (req, res) => {
   try {
     const token = req.cookies.token;
@@ -127,7 +167,7 @@ const deleteTodo = async (req, res) => {
     }
     const decodedToken = jwt.verify(token, key);
     const userId = decodedToken.id;
-    const todoId = req.body.id;
+    const todoId = req.params.id;
     const foundTodo = await todo.findOne({ _id: todoId, userId });
 
     if (!foundTodo) {
@@ -151,4 +191,4 @@ const deleteTodo = async (req, res) => {
     });
   }
 };
-module.exports = { addTodo, getAllTodo, updateTodo, deleteTodo };
+module.exports = { addTodo, getAllTodo, updateTodo, deleteTodo,getTodoById };

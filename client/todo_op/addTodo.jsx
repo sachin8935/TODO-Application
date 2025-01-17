@@ -3,7 +3,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 const URL = import.meta.env.VITE_BACKEND_URL;
-function AddTodo({ addTodoListing }) {
+function AddTodo({ addTodoListing,updateTodoListing }) {
   const [titleVal, setTitle] = useState("");
   const [descriptionVal, setDescription] = useState("");
   const [dueDateVal, setDueDate] = useState("");
@@ -11,7 +11,9 @@ function AddTodo({ addTodoListing }) {
   function goBackHandler() {
     addTodoListing(true);
   }
-
+  function updateList(){
+    updateTodoListing((prevStatus) => !prevStatus);
+  }
   async function submitHandler(e) {
     e.preventDefault();
     const strDate= dueDateVal.toString();
@@ -25,7 +27,8 @@ function AddTodo({ addTodoListing }) {
         withCredentials:true,
       });
 
-      if (response.status === 200) {
+      if (response.status === 201) {
+        updateList();
         toast.success("Todo added successfully!", {
           position: "top-right",
           autoClose: 3000,

@@ -4,8 +4,10 @@ import AddTodo from "./addTodo";
 import UpdateTodo from "./updateTodo";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { NavLink, Routes,Route, Link, useNavigate } from "react-router-dom";
 const URL = import.meta.env.VITE_BACKEND_URL;
 function Todo() {
+  const navigate = useNavigate();
   const [addTodoButton, setAddTodoButton] = useState(false);
   const [updateTodo, setupdateTodo] = useState(false);
   const [todoList, setTodoList] = useState([]);
@@ -71,8 +73,25 @@ function Todo() {
   const editTodoHandler = () => {
     setEditTodo((prevStatus) => !prevStatus);
   };
+  function logoutHandler(){
+    axios.get(`${URL}/logout`,{withCredentials:true})
+    .then((response)=>{
+      toast.success("User successfully Loged Out", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      navigate('/');
+    })
+    .catch((err)=>{
+      toast.error("Unable to Logout", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    })
+  }
   return (
     <div>
+      <button type="button" onClick={logoutHandler}>Logout</button>
       <button type="button" onClick={() => addTodoHandler(true)}>
         Add Todo
       </button>

@@ -19,8 +19,6 @@ const signup = async (req, res) => {
     const token = jwt.sign(payload, key, { expiresIn: "2h" });
     res.cookie("token", token, {
       httpOnly: true, // Ensures the cookie is not accessible via JavaScript
-      secure: false, // Set to true if using HTTPS (false for localhost)
-      sameSite: "strict", // Helps mitigate CSRF attacks
     });
 
     return res.status(201).json({

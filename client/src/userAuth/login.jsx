@@ -2,8 +2,11 @@ import { useState } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Todo from "../../todo_op/todos";
+import { NavLink, Routes,Route, Link, useNavigate } from "react-router-dom";
 const URL = import.meta.env.VITE_BACKEND_URL;
 function Login() {
+  const navigate = useNavigate();
   const [email_value, setEmail_value] = useState("");
   const [pass_value, setPass_value] = useState("");
   const [checked, isChecked] = useState(false);
@@ -27,7 +30,9 @@ function Login() {
         withCredentials:true,
       })
       .then((response) => {
-        console.log(response);
+        if(response.status===200){
+          navigate('/todo');
+        }
         toast.success("Registration successful!", {
           position: "top-right",
           autoClose: 3000,
@@ -42,6 +47,9 @@ function Login() {
           autoClose: 3000,
         });
       });
+  }
+  function signUpHandler(){
+    navigate('/signup')
   }
   return (
     <div>
@@ -70,6 +78,10 @@ function Login() {
         </div>
         <button id="">Login</button>
       </form>
+      <div>
+        Don't have an account Just 
+        <button type="button" onClick={signUpHandler}>Signup</button>
+      </div>
       <ToastContainer/>
     </div>
   );

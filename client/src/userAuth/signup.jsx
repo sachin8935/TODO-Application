@@ -2,8 +2,9 @@ import { useState } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { NavLink, Routes,Route, Link, useNavigate } from "react-router-dom";
 function Signup() {
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -29,7 +30,9 @@ function Signup() {
         withCredentials:true,
       })
       .then((response) => {
-        console.log(response);
+        if(response.status===201){
+          navigate('/todo');
+        }
         toast.success("Registration successful!", {
           position: "top-right",
           autoClose: 3000,

@@ -72,7 +72,6 @@ const getAllTodo = async (req, res) => {
   }
 };
 const getTodoById = async (req, res) => {
-  console.log("hello");
   try {
     const token = req.cookies.token;
     if (!token) {
@@ -87,7 +86,6 @@ const getTodoById = async (req, res) => {
     const todoId = req.params.id // Assuming the ID is passed as a URL parameter
 
     const foundTodo = await todo.findOne({ _id: todoId, userId });
-    console.log(foundTodo);
 
     if (!foundTodo) {
       return res.status(404).json({
@@ -160,14 +158,17 @@ const deleteTodo = async (req, res) => {
   try {
     const token = req.cookies.token;
     if (!token) {
-      return res.status(404).json({
+      return res.status(401).json({
         success: false,
-        message: "You need to login before updating the todo",
+        message: "You need to login before deleting the todo",
       });
     }
+
     const decodedToken = jwt.verify(token, key);
     const userId = decodedToken.id;
     const todoId = req.params.id;
+
+    // Find the todo and verify ownership
     const foundTodo = await todo.findOne({ _id: todoId, userId });
 
     if (!foundTodo) {
@@ -176,8 +177,23 @@ const deleteTodo = async (req, res) => {
         message: "Todo not found or you do not have permission to delete it.",
       });
     }
+
+    // Delete the todo from the database
     await todo.findByIdAndDelete(todoId);
-    await user.findByIdAndUpdate(userId, { $pull: { todos: todoId } });
+
+    // Remove the todo ID from the user's todos array
+    const userUpdateResult = await user.findByIdAndUpdate(
+      userId,
+      { $pull: { todo: todoId } }, // Make sure 'todo' matches the field in your user schema
+      { new: true } // Return the updated user document
+    );
+
+    if (!userUpdateResult) {
+      return res.status(500).json({
+        success: false,
+        message: "Failed to update user's todo list",
+      });
+    }
 
     return res.status(200).json({
       success: true,
@@ -191,4 +207,48 @@ const deleteTodo = async (req, res) => {
     });
   }
 };
-module.exports = { addTodo, getAllTodo, updateTodo, deleteTodo,getTodoById };
+const isTokenValid = async (req, res) => {
+  try {
+    const token = req.cookies.token;
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "Token not provided",
+      });
+    }
+    const decodedToken = jwt.verify(token, key);
+    const validUser = await user.findById(decodedToken.id); 
+    if (validUser) {
+      return res.status(200).json({
+        success: true,
+        message: "Token is valid. User is logged in.",
+        valid: true, // Add this to indicate the token's validity
+      });
+    }
+    return res.status(404).json({
+      success: false,
+      message: "Token is invalid or user does not exist",
+      valid: false,
+    });
+  } catch (err) {
+    console.error("Error validating token:", err);
+    return res.status(400).json({
+      success: false,
+      message: "Invalid or expired token",
+      valid: false,
+    });
+  }
+};
+const logOut = (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    path: "/",
+  });
+  return res.status(200).json({
+    success: true,
+    message: "Logged out successfully",
+  });
+};
+
+
+module.exports = { addTodo, getAllTodo, updateTodo, deleteTodo,getTodoById,isTokenValid,logOut };

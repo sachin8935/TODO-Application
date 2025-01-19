@@ -3,12 +3,12 @@ import { useState, useEffect } from "react";
 const URL = import.meta.env.VITE_BACKEND_URL;
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+// import "./updateTodo.css";
 function UpdateTodo(props) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
   const [dueDate, setDueDate] = useState("");
-
   const id = props.todoByID;
   useEffect(() => {
     const fetchTodo = async () => {

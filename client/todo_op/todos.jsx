@@ -4,7 +4,8 @@ import AddTodo from "./addTodo";
 import UpdateTodo from "./updateTodo";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { NavLink, Routes,Route, Link, useNavigate } from "react-router-dom";
+import { NavLink, Routes, Route, Link, useNavigate } from "react-router-dom";
+import "./todo.css";
 const URL = import.meta.env.VITE_BACKEND_URL;
 function Todo() {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ function Todo() {
         });
       });
   }
-  
+
   const fetchTodo = () => {
     axios
       .get(`${URL}/getAllTodo`, { withCredentials: true })
@@ -73,34 +74,42 @@ function Todo() {
   const editTodoHandler = () => {
     setEditTodo((prevStatus) => !prevStatus);
   };
-  function logoutHandler(){
-    axios.get(`${URL}/logout`,{withCredentials:true})
-    .then((response)=>{
-      toast.success("User successfully Loged Out", {
-        position: "top-right",
-        autoClose: 3000,
+  function logoutHandler() {
+    axios
+      .get(`${URL}/logout`, { withCredentials: true })
+      .then((response) => {
+        toast.success("User successfully Loged Out", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        navigate("/");
+      })
+      .catch((err) => {
+        toast.error("Unable to Logout", {
+          position: "top-right",
+          autoClose: 3000,
+        });
       });
-      navigate('/');
-    })
-    .catch((err)=>{
-      toast.error("Unable to Logout", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-    })
   }
   return (
     <div>
-      <button type="button" onClick={logoutHandler}>Logout</button>
+      <button type="button" onClick={logoutHandler}>
+        Logout
+      </button>
       <button type="button" onClick={() => addTodoHandler(true)}>
         Add Todo
       </button>
       {addTodoButton && (
-        <AddTodo
-          addTodoListing={addTodoHandler}
-          updateTodoListing={updateTodoHandler}
-        />
+        <div className="overlay">
+          <div className="form-container">
+            <AddTodo
+              addTodoListing={addTodoHandler}
+              updateTodoListing={updateTodoHandler}
+            />
+          </div>
+        </div>
       )}
+
       <div>
         <table border="1">
           <thead>
@@ -128,13 +137,25 @@ function Todo() {
                   >
                     Update
                   </button>
-                  <button onClick={() => deleteHandler(todo._id)}>Delete</button>
+                  <button onClick={() => deleteHandler(todo._id)}>
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        {editTodo && <UpdateTodo todoByID={keyValue} saveEditTodo={editTodoHandler} updateTodoListing={updateTodoHandler}/>}
+        {editTodo && (
+          <div className="overlay">
+            <div className="form-container">
+              <UpdateTodo
+                todoByID={keyValue}
+                saveEditTodo={editTodoHandler}
+                updateTodoListing={updateTodoHandler}
+              />
+            </div>
+          </div>
+        )}
       </div>
       <ToastContainer />
     </div>

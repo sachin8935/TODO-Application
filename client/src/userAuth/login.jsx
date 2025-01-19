@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Todo from "../../todo_op/todos";
 import { NavLink, Routes,Route, Link, useNavigate } from "react-router-dom";
 const URL = import.meta.env.VITE_BACKEND_URL;
+import "./login.css";
 function Login() {
   const navigate = useNavigate();
   const [email_value, setEmail_value] = useState("");
@@ -52,8 +53,12 @@ function Login() {
     navigate('/signup')
   }
   return (
-    <div>
-      <form onSubmit={submitHandler}>
+    <div className="head">
+  <div className="body_path">
+    <div className="login_text">LOGIN</div>
+    <form onSubmit={submitHandler}>
+      <div>
+        <label>Email ID</label>
         <input
           type="email"
           className="input_email"
@@ -63,6 +68,9 @@ function Login() {
             setEmail_value(e.target.value);
           }}
         />
+      </div>
+      <div>
+        <label>Password</label>
         <input
           type={checked ? "text" : "password"}
           className="input_pass"
@@ -72,18 +80,27 @@ function Login() {
             setPass_value(e.target.value);
           }}
         />
-        <div>
-          <input type="checkbox" onChange={handleChange} />
-          <span>Show Password</span>
-        </div>
-        <button id="">Login</button>
-      </form>
-      <div>
-        Don't have an account Just 
-        <button type="button" onClick={signUpHandler}>Signup</button>
       </div>
-      <ToastContainer/>
+      <div className="checkbox-container">
+        <input type="checkbox" onChange={handleChange} />
+        <span>Show Password</span>
+      </div>
+      <div>
+        <button type="submit">Login</button>
+      </div>
+    </form>
+    <div className="signup_form">
+      <div className="signup_text">
+      Don't have an account?
+      </div>
+      <button type="button" onClick={signUpHandler}>
+        Signup
+      </button>
     </div>
+  </div>
+    <ToastContainer />
+</div>
+
   );
 }
 export default Login;

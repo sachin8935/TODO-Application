@@ -1,0 +1,116 @@
+/* General Styling for Background Blur */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4); /* Darken the background */
+    z-index: 999; /* Ensure it is behind the form */
+    backdrop-filter: blur(8px); /* Apply blur effect */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Common Form Style */
+  .form-container {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  /* Form Heading */
+  .form-container h2 {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  
+  /* Input Fields */
+  input[type="text"],
+  input[type="date"],
+  select {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  /* Radio Button Styling */
+  input[type="radio"] {
+    margin-right: 5px;
+  }
+  
+  label {
+    margin-left: 5px;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  /* Buttons */
+  button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #45a049;
+  }
+  
+  /* Close Button */
+  button[type="button"] {
+    background-color: #f44336;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button[type="button"]:hover {
+    background-color: #e53935;
+  }
+  
+  /* Go Back Button */
+  button[type="button"] {
+    align-self: flex-start;
+    margin-top: 10px;
+  }
+  
+  /* For AddTodo and UpdateTodo Buttons */
+  button[type="button"] {
+    background-color: #2196F3;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  button[type="button"]:hover {
+    background-color: #0b7dda;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  
